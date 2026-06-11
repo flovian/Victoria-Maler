@@ -1,4 +1,4 @@
-# EcoChain Victoria
+# Victoria Maler
 
 ## Bitcoin-Verified Crowdfunding Platform for Community-Led Lake Victoria Cleanup
 
