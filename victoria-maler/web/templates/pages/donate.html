@@ -1,6 +1,14 @@
-{{ define "content" }}
-<main>
+{{ define "donate" }}
+<main class="container" style="padding:24px 20px">
   <h2>Donate</h2>
-  <p>Donation form placeholder</p>
+  <p>Your contribution helps local groups purchase equipment and organize cleanups.</p>
+
+  <section style="margin-top:16px">
+    <form>
+      <label>Amount (USD)</label><br>
+      <input type="number" name="amount" placeholder="10.00" style="padding:8px;margin-top:6px;width:200px;border:1px solid #dfefff;border-radius:6px"><br>
+      <button class="btn btn-primary" style="margin-top:12px">Donate</button>
+    </form>
+  </section>
 </main>
 {{ end }}
