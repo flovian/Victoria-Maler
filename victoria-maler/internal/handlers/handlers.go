@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
 
 	"ecochain-victoria/internal/bitcoin"
 	"ecochain-victoria/internal/config"
@@ -81,4 +82,8 @@ func (h *HandlerSet) claims(r *http.Request) (*utils.Claims, bool) {
 
 func decodeJSON(r *http.Request, v interface{}) error {
 	return json.NewDecoder(r.Body).Decode(v)
+}
+
+func queryID(r *http.Request, key string) (int64, error) {
+	return strconv.ParseInt(r.URL.Query().Get(key), 10, 64)
 }
