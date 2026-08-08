@@ -67,6 +67,11 @@ func (h *HandlerSet) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if claims.Role != "ngo" && claims.Role != "admin" {
+		utils.Forbidden(w, "only ngo or admin accounts can create campaigns")
+		return
+	}
+
 	var req createCampaignRequest
 	if err := decodeJSON(r, &req); err != nil {
 		utils.BadRequest(w, "invalid request body")

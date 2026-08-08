@@ -3,7 +3,7 @@
   <h2>Campaigns</h2>
   <p>Browse active cleanup campaigns and support community efforts.</p>
 
-  {{ if .IsLoggedIn }}
+  {{ if and .IsLoggedIn (or (eq .UserRole "ngo") (eq .UserRole "admin")) }}
     <section style="margin-top:18px">
       <h3>Create a campaign</h3>
       <form id="create-campaign-form" class="form-card">

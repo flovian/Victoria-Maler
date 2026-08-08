@@ -37,6 +37,10 @@ func Unauthorized(w http.ResponseWriter, message string) {
 	Error(w, http.StatusUnauthorized, message)
 }
 
+func Forbidden(w http.ResponseWriter, message string) {
+	Error(w, http.StatusForbidden, message)
+}
+
 func NotFound(w http.ResponseWriter, message string) {
 	Error(w, http.StatusNotFound, message)
 }

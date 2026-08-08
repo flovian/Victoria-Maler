@@ -35,21 +35,20 @@ func (s *Server) Mux() *http.ServeMux {
 func (s *Server) register() {
 	h := s.h
 	mux := s.handler
+	optAuth := middleware.OptAuth(s.secret)
 
 	// Pages
-	mux.HandleFunc("/", h.Home)
-	mux.HandleFunc("GET /home", h.Home)
-	mux.HandleFunc("GET /about.html", h.About)
-	mux.HandleFunc("GET /campaigns.html", h.CampaignsPage)
-	mux.HandleFunc("GET /campaign_details.html", h.CampaignDetailsPage)
-	mux.HandleFunc("GET /donate.html", h.DonatePage)
-	mux.HandleFunc("GET /evidence_tracker.html", h.EvidenceTrackerPage)
-	mux.HandleFunc("GET /bitcoin_verify.html", h.BitcoinVerifyPage)
+	mux.Handle("/", optAuth(http.HandlerFunc(h.Home)))
+	mux.Handle("GET /home", optAuth(http.HandlerFunc(h.Home)))
+	mux.Handle("GET /about.html", optAuth(http.HandlerFunc(h.About)))
+	mux.Handle("GET /campaigns.html", optAuth(http.HandlerFunc(h.CampaignsPage)))
+	mux.Handle("GET /campaign_details.html", optAuth(http.HandlerFunc(h.CampaignDetailsPage)))
+	mux.Handle("GET /donate.html", optAuth(http.HandlerFunc(h.DonatePage)))
+	mux.Handle("GET /evidence_tracker.html", optAuth(http.HandlerFunc(h.EvidenceTrackerPage)))
+	mux.Handle("GET /bitcoin_verify.html", optAuth(http.HandlerFunc(h.BitcoinVerifyPage)))
+	mux.Handle("GET /login.html", optAuth(http.HandlerFunc(h.LoginPage)))
+	mux.Handle("GET /register.html", optAuth(http.HandlerFunc(h.RegisterPage)))
 	mux.Handle("GET /dashboard.html", middleware.RequireAuth(s.secret)(http.HandlerFunc(h.DashboardPage)))
-
-	// Auth
-	mux.HandleFunc("GET /login.html", h.LoginPage)
-	mux.HandleFunc("GET /register.html", h.RegisterPage)
 	mux.HandleFunc("POST /api/auth/register", h.Register)
 	mux.HandleFunc("POST /api/auth/login", h.Login)
 	mux.HandleFunc("POST /api/auth/logout", h.Logout)

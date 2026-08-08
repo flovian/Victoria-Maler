@@ -1,14 +1,17 @@
 {{ define "content" }}
-<main class="container" style="padding:24px 20px;max-width:480px">
+<main class="auth-form">
   <h2>Register</h2>
-  <form>
+  <form id="register-form" class="form-card">
     <label>Name</label>
-    <input type="text" style="width:100%;padding:10px;margin-top:8px;border:1px solid #e6f0ff;border-radius:6px"><br>
-    <label style="margin-top:12px;display:block">Email</label>
-    <input type="email" style="width:100%;padding:10px;margin-top:8px;border:1px solid #e6f0ff;border-radius:6px"><br>
-    <label style="margin-top:12px;display:block">Password</label>
-    <input type="password" style="width:100%;padding:10px;margin-top:8px;border:1px solid #e6f0ff;border-radius:6px"><br>
-    <button class="btn btn-primary" style="margin-top:14px">Register</button>
+    <input type="text" name="name" required>
+    <label>Email</label>
+    <input type="email" name="email" required>
+    <label>Password</label>
+    <input type="password" name="password" minlength="8" required>
+    <button class="btn btn-primary" type="submit">Register</button>
   </form>
+  <p id="auth-msg" class="form-msg"></p>
+  <p class="auth-alt">Already have an account? <a href="/login.html">Login</a></p>
 </main>
+<script src="/static/js/auth.js"></script>
 {{ end }}
