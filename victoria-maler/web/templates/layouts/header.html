@@ -2,13 +2,19 @@
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="/">EcoChain Victoria</a>
-    <nav class="nav">
+    <nav class="nav" id="main-nav">
       <a href="/">Home</a>
       <a href="/campaigns.html">Campaigns</a>
       <a href="/evidence_tracker.html">Evidence</a>
       <a href="/donate.html">Donate</a>
+      <a href="/bitcoin_verify.html">Verify</a>
       <a href="/about.html">About</a>
-      <a class="auth" href="/login.html">Login</a>
+      {{ if .IsLoggedIn }}
+        <a href="/dashboard.html">Dashboard</a>
+        <a class="auth" href="#" onclick="event.preventDefault();fetch('/api/auth/logout',{method:'POST'}).then(()=>location.href='/');return false;">Logout</a>
+      {{ else }}
+        <a class="auth" href="/login.html">Login</a>
+      {{ end }}
     </nav>
     <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
   </div>
