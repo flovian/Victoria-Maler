@@ -9,7 +9,7 @@
 </head>
 <body>
   {{ template "header" . }}
-  {{ template (index . "Content") . }}
+  {{ template .Content . }}
   {{ template "footer" . }}
   <script src="/static/js/app.js"></script>
 </body>
