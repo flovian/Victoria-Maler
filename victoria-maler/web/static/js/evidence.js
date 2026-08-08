@@ -1,39 +1,32 @@
-// donate.js: donation form handling
+// evidence.js: evidence upload handling
 document.addEventListener('DOMContentLoaded', function () {
-  var form = document.getElementById('donate-form');
+  var form = document.getElementById('evidence-form');
   if (!form) return;
 
-  var msg = document.getElementById('donate-msg');
+  var msg = document.getElementById('evidence-msg');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (msg) msg.textContent = 'Processing donation...';
+    if (msg) msg.textContent = 'Uploading and anchoring evidence...';
 
     var fd = new FormData(form);
-    var payload = {
-      campaign_id: parseInt(fd.get('campaign_id')),
-      donor_name: fd.get('donor_name'),
-      amount: parseFloat(fd.get('amount')),
-      message: fd.get('message')
-    };
 
-    fetch('/api/donations', {
+    fetch('/api/evidence?campaign_id=' + fd.get('campaign_id') + '&report_id=0', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin',
-      body: JSON.stringify(payload)
+      body: fd
     })
       .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
       .then(function (r) {
         if (r.ok) {
           if (msg) {
             msg.style.color = '#0a7d32';
-            msg.textContent = 'Thank you! Donation recorded.';
+            msg.textContent = 'Evidence uploaded and anchored successfully!';
           }
           setTimeout(function () { location.reload(); }, 900);
         } else {
           if (msg) {
             msg.style.color = '#c62828';
-            msg.textContent = r.data.message || 'Could not record donation.';
+            msg.textContent = r.data.message || 'Upload failed.';
           }
         }
       })
