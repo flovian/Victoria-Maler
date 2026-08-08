@@ -10,10 +10,10 @@ import (
 // When no bitcoind node is reachable it degrades gracefully to a clearly
 // labelled simulated anchor so the full platform flow keeps working.
 type AnchoringService struct {
-	Enabled   bool
-	Client    *RPCClient
+	Enabled    bool
+	Client     *RPCClient
 	recordRepo RecordSaver
-	now       func() int64
+	now        func() int64
 }
 
 type RecordSaver interface {

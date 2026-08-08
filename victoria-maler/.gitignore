@@ -11,3 +11,7 @@ storage/database.db
 
 # uploads
 web/static/uploads/
+
+# local env overrides
+.env.local
+.env.*.local

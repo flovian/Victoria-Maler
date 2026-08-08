@@ -24,10 +24,14 @@ func NewDonationRepository(db *sql.DB) *SQLiteDonationRepository {
 const donationColumns = `id, campaign_id, user_id, donor_name, amount, message, created_at`
 
 func (r *SQLiteDonationRepository) Create(d *models.Donation) error {
+	var userID interface{}
+	if d.UserID > 0 {
+		userID = d.UserID
+	}
 	res, err := r.DB.Exec(
 		`INSERT INTO donations (campaign_id, user_id, donor_name, amount, message, created_at)
 		 VALUES (?, ?, ?, ?, ?, ?)`,
-		d.CampaignID, d.UserID, d.DonorName, d.Amount, d.Message, d.CreatedAt,
+		d.CampaignID, userID, d.DonorName, d.Amount, d.Message, d.CreatedAt,
 	)
 	if err != nil {
 		return err

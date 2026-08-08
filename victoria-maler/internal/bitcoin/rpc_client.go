@@ -11,10 +11,10 @@ import (
 )
 
 type RPCClient struct {
-	URL      string
-	User     string
-	Pass     string
-	HTTP     *http.Client
+	URL  string
+	User string
+	Pass string
+	HTTP *http.Client
 }
 
 func NewRPCClient(url, user, pass string) *RPCClient {

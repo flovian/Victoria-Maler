@@ -7,12 +7,12 @@ import (
 )
 
 type Config struct {
-	DBPath     string
-	Port       string
-	Env        string
-	JWTSecret  string
-	UploadDir  string
-	Bitcoin    BitcoinConfig
+	DBPath    string
+	Port      string
+	Env       string
+	JWTSecret string
+	UploadDir string
+	Bitcoin   BitcoinConfig
 }
 
 type BitcoinConfig struct {

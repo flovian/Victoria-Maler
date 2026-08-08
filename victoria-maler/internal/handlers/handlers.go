@@ -53,7 +53,6 @@ func (r *Renderer) Page(w http.ResponseWriter, req *http.Request, page string, d
 	if data == nil {
 		data = map[string]interface{}{}
 	}
-	data["Content"] = page
 
 	if claims, ok := middleware.Claims(req); ok {
 		data["IsLoggedIn"] = true
@@ -73,14 +72,14 @@ func (r *Renderer) Page(w http.ResponseWriter, req *http.Request, page string, d
 	pagePath := "web/templates/pages/" + page + ".html"
 	files := append(layouts, pagePath)
 
-	tpl, err := template.New("base.html").Funcs(funcMap()).ParseFiles(files...)
+	tpl, err := template.New("layout").Funcs(funcMap()).ParseFiles(files...)
 	if err != nil {
 		log.Printf("render %s: template parse error: %v", page, err)
 		http.Error(w, "Template parse error", http.StatusInternalServerError)
 		return
 	}
 
-	if err := tpl.ExecuteTemplate(w, "base.html", data); err != nil {
+	if err := tpl.ExecuteTemplate(w, "layout", data); err != nil {
 		log.Printf("render %s: execute error: %v", page, err)
 		http.Error(w, "Template render error", http.StatusInternalServerError)
 	}

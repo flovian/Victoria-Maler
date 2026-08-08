@@ -25,11 +25,15 @@ func NewEvidenceRepository(db *sql.DB) *SQLiteEvidenceRepository {
 const evidenceColumns = `id, report_id, campaign_id, file_path, file_type, caption, content_hash, txid, anchor_status, timestamp, created_at`
 
 func (r *SQLiteEvidenceRepository) Save(e *models.Evidence) error {
+	var reportID interface{}
+	if e.ReportID > 0 {
+		reportID = e.ReportID
+	}
 	res, err := r.DB.Exec(
 		`INSERT INTO evidence
 		 (report_id, campaign_id, file_path, file_type, caption, content_hash, txid, anchor_status, timestamp, created_at)
 		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		e.ReportID, e.CampaignID, e.FilePath, e.FileType, e.Caption, e.ContentHash,
+		reportID, e.CampaignID, e.FilePath, e.FileType, e.Caption, e.ContentHash,
 		e.TxID, e.AnchorStatus, e.Timestamp, e.CreatedAt,
 	)
 	if err != nil {

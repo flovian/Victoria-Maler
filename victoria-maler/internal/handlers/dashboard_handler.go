@@ -43,15 +43,15 @@ func (h *HandlerSet) DashboardPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.Render.Page(w, r, "dashboard", map[string]interface{}{
-		"User":            user,
-		"Campaigns":       myCampaigns,
-		"Donations":       myDonations,
-		"Reports":         myReports,
-		"TotalDonated":    totalRaised,
-		"CampaignsCount":  len(myCampaigns),
-		"DonationsCount":  len(myDonations),
-		"ReportsCount":    len(myReports),
-		"EvidencesCount":  0,
+		"User":           user,
+		"Campaigns":      myCampaigns,
+		"Donations":      myDonations,
+		"Reports":        myReports,
+		"TotalDonated":   totalRaised,
+		"CampaignsCount": len(myCampaigns),
+		"DonationsCount": len(myDonations),
+		"ReportsCount":   len(myReports),
+		"EvidencesCount": 0,
 	})
 }
 

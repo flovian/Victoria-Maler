@@ -37,7 +37,7 @@ func (s *Server) register() {
 	mux := s.handler
 
 	// Pages
-	mux.HandleFunc("GET /", h.Home)
+	mux.HandleFunc("/", h.Home)
 	mux.HandleFunc("GET /home", h.Home)
 	mux.HandleFunc("GET /about.html", h.About)
 	mux.HandleFunc("GET /campaigns.html", h.CampaignsPage)

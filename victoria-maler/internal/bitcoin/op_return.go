@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	opReturn       = 0x6a
-	opPushData1    = 0x4c
-	opPushData2    = 0x4d
+	opReturn    = 0x6a
+	opPushData1 = 0x4c
+	opPushData2 = 0x4d
 )
 
 // Prefix marks EcoChain Victoria records on-chain.

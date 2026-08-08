@@ -4,6 +4,33 @@
 
 ---
 
+# Quick Start
+
+```bash
+# 1. Run database migrations
+./scripts/migrate.sh
+
+# 2. (Optional) Seed demo data
+./scripts/seed.sh
+#   admin: admin@victoriamaler.org / admin12345
+#   ngo:   ngo@victoriamaler.org / ngo12345
+
+# 3. Start the server
+./scripts/run.sh
+# open http://localhost:8080/
+```
+
+Configuration lives in `.env` (`DB_PATH`, `PORT`, `JWT_SECRET`, and the
+`BITCOIN_*` keys). Bitcoin anchoring degrades gracefully: with no bitcoind
+node reachable, records are stored with a clearly labelled `sim-` txid and
+`simulated` status so the whole platform remains usable and verifiable.
+
+```bash
+go test ./...
+```
+
+---
+
 # Project Overview
 
 EcoChain Victoria is a community-driven environmental crowdfunding platform designed to support, verify, and promote cleanup activities around Lake Victoria. The platform enables individuals, organizations, NGOs, environmental groups, and community volunteers to raise funds, document cleanup activities, and provide transparent proof that environmental restoration efforts have actually taken place.

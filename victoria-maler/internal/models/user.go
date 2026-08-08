@@ -10,7 +10,7 @@ type User struct {
 }
 
 const (
-	RoleDonor  = "donor"
-	RoleNGO    = "ngo"
-	RoleAdmin  = "admin"
+	RoleDonor = "donor"
+	RoleNGO   = "ngo"
+	RoleAdmin = "admin"
 )

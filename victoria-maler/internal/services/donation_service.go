@@ -11,8 +11,8 @@ import (
 var ErrInvalidDonation = errors.New("donation amount must be positive")
 
 type DonationService struct {
-	donations  repositories.DonationRepository
-	campaigns  repositories.CampaignRepository
+	donations repositories.DonationRepository
+	campaigns repositories.CampaignRepository
 }
 
 func NewDonationService(donations repositories.DonationRepository, campaigns repositories.CampaignRepository) *DonationService {

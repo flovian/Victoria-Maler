@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	cookieName     = "token"
-	headerAuth     = "Authorization"
-	headerPrefix   = "Bearer "
+	cookieName   = "token"
+	headerAuth   = "Authorization"
+	headerPrefix = "Bearer "
 )
 
 type contextKey string
