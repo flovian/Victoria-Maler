@@ -3,12 +3,24 @@
   <h2>Donate</h2>
   <p>Your contribution helps local groups purchase equipment and organize cleanups.</p>
 
-  <section style="margin-top:16px">
-    <form>
-      <label>Amount (USD)</label><br>
-      <input type="number" name="amount" placeholder="10.00" style="padding:8px;margin-top:6px;width:200px;border:1px solid #dfefff;border-radius:6px"><br>
-      <button class="btn btn-primary" style="margin-top:12px">Donate</button>
+  <section style="margin-top:16px" class="form-card">
+    <form id="donate-form">
+      <label>Campaign</label>
+      <select name="campaign_id" required>
+        {{ range .Campaigns }}
+          <option value="{{ .ID }}">{{ .Title }}</option>
+        {{ end }}
+      </select>
+      <label>Your name</label>
+      <input type="text" name="donor_name">
+      <label>Amount (USD)</label>
+      <input type="number" name="amount" min="0.01" step="0.01" placeholder="10.00" required>
+      <label>Message (optional)</label>
+      <textarea name="message" rows="2"></textarea>
+      <button class="btn btn-primary" type="submit">Donate</button>
     </form>
+    <p id="donate-msg" class="form-msg"></p>
   </section>
 </main>
+<script src="/static/js/donate.js"></script>
 {{ end }}

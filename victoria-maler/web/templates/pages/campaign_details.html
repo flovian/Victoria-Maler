@@ -1,7 +1,68 @@
 {{ define "campaign_details" }}
 <main class="container" style="padding:24px 20px">
-  <h2>Campaign Details</h2>
-  <p>Placeholder details for a campaign. Add images, description, fundraising target, and progress here.</p>
-  <p><a class="btn btn-primary" href="/donate.html">Donate to this campaign</a></p>
+  <h2>{{ .Campaign.Title }}</h2>
+  <p class="muted">{{ .Campaign.Location }} · {{ .Campaign.Status }}</p>
+  <p>{{ .Campaign.Description }}</p>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" style="width: {{ progressPercent .Campaign.RaisedAmount .Campaign.TargetAmount }}%"></div>
+  </div>
+  <p class="muted">{{ printf "$%.2f" .Campaign.RaisedAmount }} raised of {{ printf "$%.2f" .Campaign.TargetAmount }}</p>
+
+  <section style="margin-top:22px">
+    <h3>Donate</h3>
+    <form id="donate-form" class="form-card">
+      <input type="hidden" name="campaign_id" value="{{ .Campaign.ID }}">
+      <label>Name</label>
+      <input type="text" name="donor_name">
+      <label>Amount (USD)</label>
+      <input type="number" name="amount" min="0.01" step="0.01" required>
+      <label>Message (optional)</label>
+      <textarea name="message" rows="2"></textarea>
+      <button class="btn btn-primary" type="submit">Donate</button>
+    </form>
+    <p id="donate-msg" class="form-msg"></p>
+  </section>
+
+  <section style="margin-top:22px">
+    <h3>Cleanup Reports</h3>
+    {{ range .Reports }}
+      <div class="card">
+        <h4>{{ .Title }}</h4>
+        <p class="muted">{{ .Location }} · {{ .CleanupDate }} · {{ .WasteKg }} kg waste · {{ .Volunteers }} volunteers</p>
+        <p>{{ .Notes }}</p>
+        <p class="muted small">Hash: <code>{{ .ContentHash }}</code></p>
+        <p class="muted small">Anchor: <code>{{ .TxID }}</code> ({{ .AnchorStatus }})</p>
+      </div>
+    {{ else }}
+      <p>No cleanup reports submitted yet.</p>
+    {{ end }}
+  </section>
+
+  <section style="margin-top:22px">
+    <h3>Evidence</h3>
+    {{ range .Evidences }}
+      <div class="card">
+        <p>{{ .Caption }}</p>
+        <p class="muted small">File: {{ .FilePath }} · {{ .FileType }}</p>
+        <p class="muted small">Anchor: <code>{{ .TxID }}</code> ({{ .AnchorStatus }})</p>
+      </div>
+    {{ else }}
+      <p>No evidence uploaded yet.</p>
+    {{ end }}
+  </section>
+
+  <section style="margin-top:22px">
+    <h3>Recent Donations</h3>
+    {{ range .Donations }}
+      <div class="card">
+        <p><strong>{{ .DonorName }}</strong> donated {{ printf "$%.2f" .Amount }}</p>
+        {{ if .Message }}<p class="muted">{{ .Message }}</p>{{ end }}
+      </div>
+    {{ else }}
+      <p>No donations yet. Be the first!</p>
+    {{ end }}
+  </section>
 </main>
+<script src="/static/js/donate.js"></script>
 {{ end }}

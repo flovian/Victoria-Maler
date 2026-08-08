@@ -34,6 +34,21 @@ type Renderer struct{}
 
 func NewRenderer() *Renderer { return &Renderer{} }
 
+func funcMap() template.FuncMap {
+	return template.FuncMap{
+		"progressPercent": func(raised, target float64) int {
+			if target <= 0 {
+				return 0
+			}
+			pct := int(raised / target * 100)
+			if pct > 100 {
+				return 100
+			}
+			return pct
+		},
+	}
+}
+
 func (r *Renderer) Page(w http.ResponseWriter, req *http.Request, page string, data map[string]interface{}) {
 	if data == nil {
 		data = map[string]interface{}{}
@@ -58,7 +73,7 @@ func (r *Renderer) Page(w http.ResponseWriter, req *http.Request, page string, d
 	pagePath := "web/templates/pages/" + page + ".html"
 	files := append(layouts, pagePath)
 
-	tpl, err := template.ParseFiles(files...)
+	tpl, err := template.New("base.html").Funcs(funcMap()).ParseFiles(files...)
 	if err != nil {
 		log.Printf("render %s: template parse error: %v", page, err)
 		http.Error(w, "Template parse error", http.StatusInternalServerError)
