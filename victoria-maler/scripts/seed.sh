@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-echo "Seed database (placeholder)"
+# Seed the database with demo data.
+set -e
+cd "$(dirname "$0")/.."
+go run ./cmd/seed

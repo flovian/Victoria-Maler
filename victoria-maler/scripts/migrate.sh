@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-echo "Run migrations (placeholder)"
+# Apply database migrations.
+set -e
+cd "$(dirname "$0")/.."
+go run ./cmd/migrate
