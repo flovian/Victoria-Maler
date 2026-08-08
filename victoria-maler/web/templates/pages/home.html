@@ -16,6 +16,21 @@
     </div>
   </section>
 
+  <section class="container stats">
+    <div class="stat">
+      <span class="stat-value">{{ .CampaignCount }}</span>
+      <span class="stat-label">Campaigns</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ printf "$%.0f" .TotalRaised }}</span>
+      <span class="stat-label">Raised</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ .ActiveCount }}</span>
+      <span class="stat-label">Active</span>
+    </div>
+  </section>
+
   <section class="cards container">
     <article class="card">
       <h3>Transparent Donations</h3>
@@ -29,6 +44,21 @@
       <h3>Bitcoin Anchoring</h3>
       <p>Anchor evidence hashes to Bitcoin for long-term verification.</p>
     </article>
+  </section>
+
+  <section class="container">
+    <h2>Featured Campaigns</h2>
+    <div class="cards">
+      {{ range .Campaigns }}
+        <article class="card">
+          <h3>{{ .Title }}</h3>
+          <p>{{ .Description }}</p>
+          <p class="muted">{{ .Location }}</p>
+          <p class="muted">{{ printf "$%.2f" .RaisedAmount }} of {{ printf "$%.2f" .TargetAmount }}</p>
+          <a class="btn btn-primary" href="/campaign_details.html?id={{ .ID }}">View</a>
+        </article>
+      {{ end }}
+    </div>
   </section>
 </main>
 {{ end }}

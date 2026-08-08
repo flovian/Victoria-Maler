@@ -3,15 +3,37 @@
   <h2>Campaigns</h2>
   <p>Browse active cleanup campaigns and support community efforts.</p>
 
+  {{ if .IsLoggedIn }}
+    <section style="margin-top:18px">
+      <h3>Create a campaign</h3>
+      <form id="create-campaign-form" class="form-card">
+        <label>Title</label>
+        <input type="text" name="title" required>
+        <label>Location</label>
+        <input type="text" name="location">
+        <label>Target amount (USD)</label>
+        <input type="number" name="target_amount" min="1" step="0.01" required>
+        <label>Description</label>
+        <textarea name="description" rows="3"></textarea>
+        <button class="btn btn-primary" type="submit">Create Campaign</button>
+      </form>
+      <p id="campaign-msg" class="form-msg"></p>
+    </section>
+  {{ end }}
+
   <section class="cards" style="padding-top:18px">
-    <article class="card">
-      <h3>Beach Cleanup - Entebbe</h3>
-      <p>Help remove plastic waste from the shoreline. <a href="/campaign_details.html">Details</a></p>
-    </article>
-    <article class="card">
-      <h3>Lakeside Restoration - Kisumu</h3>
-      <p>Support volunteers restoring habitat. <a href="/campaign_details.html">Details</a></p>
-    </article>
+    {{ range .Campaigns }}
+      <article class="card">
+        <h3>{{ .Title }}</h3>
+        <p>{{ .Description }}</p>
+        <p class="muted">{{ .Location }} · {{ .Status }}</p>
+        <p class="muted">{{ printf "$%.2f" .RaisedAmount }} raised of {{ printf "$%.2f" .TargetAmount }}</p>
+        <a class="btn btn-primary" href="/campaign_details.html?id={{ .ID }}">Details</a>
+      </article>
+    {{ else }}
+      <p>No campaigns yet. Be the first to start one.</p>
+    {{ end }}
   </section>
 </main>
+<script src="/static/js/campaigns.js"></script>
 {{ end }}
