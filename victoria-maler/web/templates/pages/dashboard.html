@@ -1,19 +1,50 @@
 {{ define "dashboard" }}
 <main class="container" style="padding:24px 20px">
   <h2>Dashboard</h2>
-  <p>Overview of your campaigns, donations and submitted evidence.</p>
+  <p>Welcome, {{ .User.Email }} — an overview of your campaigns, donations and submitted evidence.</p>
 
   <section style="margin-top:18px">
     <div class="cards">
       <article class="card">
         <h3>Your Campaigns</h3>
-        <p>2 active campaigns</p>
+        <p>{{ .CampaignsCount }} campaign(s)</p>
       </article>
       <article class="card">
         <h3>Donations</h3>
-        <p>$1,250 raised</p>
+        <p>{{ printf "$%.2f" .TotalDonated }} donated across {{ .DonationsCount }} transaction(s)</p>
+      </article>
+      <article class="card">
+        <h3>Cleanup Reports</h3>
+        <p>{{ .ReportsCount }} submitted</p>
       </article>
     </div>
+  </section>
+
+  <section style="margin-top:24px">
+    <h3>My Campaigns</h3>
+    {{ range .Campaigns }}
+      <div class="card">
+        <h4>{{ .Title }}</h4>
+        <p class="muted">{{ .Location }} · {{ .Status }}</p>
+        <p class="muted">{{ printf "$%.2f" .RaisedAmount }} of {{ printf "$%.2f" .TargetAmount }}</p>
+        <a class="btn btn-outline" href="/campaign_details.html?id={{ .ID }}">View</a>
+      </div>
+    {{ else }}
+      <p>You have not created any campaigns yet.</p>
+    {{ end }}
+  </section>
+
+  <section style="margin-top:24px">
+    <h3>My Cleanup Reports</h3>
+    {{ range .Reports }}
+      <div class="card">
+        <h4>{{ .Title }}</h4>
+        <p class="muted">{{ .Location }} · {{ .CleanupDate }} · {{ .WasteKg }} kg</p>
+        <p class="muted small">Anchor: <code>{{ .TxID }}</code> ({{ .AnchorStatus }})</p>
+      </div>
+    {{ else }}
+      <p>You have not submitted any cleanup reports yet.</p>
+    {{ end }}
   </section>
 </main>
 {{ end }}

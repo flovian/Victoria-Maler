@@ -1,6 +1,40 @@
 {{ define "bitcoin_verify" }}
 <main class="container" style="padding:24px 20px">
   <h2>Bitcoin Verification</h2>
-  <p>Verify evidence by comparing recorded hashes with Bitcoin-anchored transactions.</p>
+  <p>Verify that a recorded hash was anchored on Bitcoin. If any record is altered after submission, its hash will no longer match.</p>
+
+  <section class="form-card" style="margin-top:16px">
+    <h3>Verify a record</h3>
+    <form id="verify-form">
+      <label>Content hash</label>
+      <input type="text" name="hash" placeholder="Enter a 64-character SHA-256 hash" required>
+      <label>Transaction id (optional)</label>
+      <input type="text" name="txid">
+      <button class="btn btn-primary" type="submit">Verify</button>
+    </form>
+    <div id="verify-result"></div>
+  </section>
+
+  <section style="margin-top:24px">
+    <h3>Anchored records</h3>
+    <table class="table">
+      <thead>
+        <tr><th>Type</th><th>Hash</th><th>Status</th><th>TxID</th></tr>
+      </thead>
+      <tbody>
+        {{ range .Records }}
+          <tr>
+            <td>{{ .RecordType }}</td>
+            <td><code class="hash-cell">{{ .ContentHash }}</code></td>
+            <td><span class="badge">{{ .Status }}</span></td>
+            <td><code class="hash-cell">{{ .TxID }}</code></td>
+          </tr>
+        {{ else }}
+          <tr><td colspan="4">No anchored records yet.</td></tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </section>
 </main>
+<script src="/static/js/verify.js"></script>
 {{ end }}

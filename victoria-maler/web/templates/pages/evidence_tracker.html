@@ -1,6 +1,29 @@
 {{ define "evidence_tracker" }}
 <main class="container" style="padding:24px 20px">
   <h2>Evidence Tracker</h2>
-  <p>Upload and view evidence for cleanup operations. Photos and reports help verify work.</p>
+  <p>Upload and view evidence for cleanup operations. Photos and reports are hashed and anchored on Bitcoin.</p>
+
+  <section class="form-card" style="margin-top:16px">
+    <h3>Submit evidence</h3>
+    <form id="evidence-form" enctype="multipart/form-data">
+      <label>Campaign</label>
+      <select name="campaign_id" required>
+        {{ range .Campaigns }}
+          <option value="{{ .ID }}">{{ .Title }}</option>
+        {{ end }}
+      </select>
+      <label>Caption</label>
+      <input type="text" name="caption">
+      <label>File (photo, PDF, CSV or report)</label>
+      <input type="file" name="file" required>
+      <button class="btn btn-primary" type="submit">Upload Evidence</button>
+    </form>
+    <p id="evidence-msg" class="form-msg"></p>
+  </section>
+
+  {{ if not .IsLoggedIn }}
+    <p class="form-msg">Please <a href="/login.html">log in</a> to upload evidence.</p>
+  {{ end }}
 </main>
+<script src="/static/js/app.js"></script>
 {{ end }}
