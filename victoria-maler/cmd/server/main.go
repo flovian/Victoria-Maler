@@ -1,58 +1,68 @@
 package main
 
 import (
-    "html/template"
-    "log"
-    "os"
-    "net/http"
-    "path/filepath"
+	"log"
+	"net/http"
+
+	"ecochain-victoria/internal/bitcoin"
+	"ecochain-victoria/internal/config"
+	"ecochain-victoria/internal/database"
+	"ecochain-victoria/internal/handlers"
+	"ecochain-victoria/internal/repositories"
+	"ecochain-victoria/internal/routes"
+	"ecochain-victoria/internal/services"
 )
 
 func main() {
-    // Static assets
-    fs := http.FileServer(http.Dir("web/static"))
-    http.Handle("/static/", http.StripPrefix("/static/", fs))
+	cfg := config.Load()
 
-    // Routes
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        // decide which page to load
-        path := r.URL.Path
-        if path == "/" || path == "" {
-            path = "/home.html"
-        }
-        page := filepath.Base(path) // e.g. home.html
-        name := page[:len(page)-len(filepath.Ext(page))]
+	db, err := database.Open(cfg.DBPath)
+	if err != nil {
+		log.Fatalf("open database: %v", err)
+	}
+	defer db.Close()
 
-        // build template set for this request: layouts + the requested page
-        layouts := []string{
-            "web/templates/layouts/base.html",
-            "web/templates/layouts/header.html",
-            "web/templates/layouts/footer.html",
-        }
-        pagePath := "web/templates/pages/" + name + ".html"
-        files := append(layouts, pagePath)
+	if err := database.Migrate(db, "migrations"); err != nil {
+		log.Fatalf("run migrations: %v", err)
+	}
+	log.Printf("database ready at %s", cfg.DBPath)
 
-        tpl, err := template.ParseFiles(files...)
-        if err != nil {
-            http.Error(w, "Template parse error", http.StatusInternalServerError)
-            log.Printf("template parse error for %s: %v", name, err)
-            return
-        }
+	userRepo := repositories.NewUserRepository(db)
+	campaignRepo := repositories.NewCampaignRepository(db)
+	donationRepo := repositories.NewDonationRepository(db)
+	cleanupRepo := repositories.NewCleanupRepository(db)
+	evidenceRepo := repositories.NewEvidenceRepository(db)
+	bitcoinRepo := repositories.NewBitcoinRecordRepository(db)
 
-        if err := tpl.ExecuteTemplate(w, "base.html", nil); err != nil {
-            http.Error(w, "Template render error", http.StatusInternalServerError)
-            log.Printf("template execute error for %s: %v", name, err)
-        }
-    })
+	rpcClient := bitcoin.NewRPCClient(cfg.Bitcoin.RPCURL, cfg.Bitcoin.RPCUser, cfg.Bitcoin.RPCPass)
+	bitcoin.SetGlobalClient(rpcClient)
 
-    port := os.Getenv("PORT")
-    if port == "" {
-        port = "8080"
-    }
-    addr := ":" + port
-    log.Printf("Starting server on %s — open http://localhost:%s/", addr, port)
-    if err := http.ListenAndServe(addr, nil); err != nil {
-        log.Fatalf("server error: %v", err)
-    }
+	anchoring := bitcoin.NewAnchoringService(
+		cfg.Bitcoin.Enabled,
+		rpcClient,
+		services.NewBitcoinRecordSaver(bitcoinRepo),
+	)
+
+	handlerSet := &handlers.HandlerSet{
+		Config:         cfg,
+		Render:         handlers.NewRenderer(),
+		Auth:           services.NewAuthService(userRepo, cfg),
+		Campaigns:      services.NewCampaignService(campaignRepo),
+		Donations:      services.NewDonationService(donationRepo, campaignRepo),
+		Cleanups:       services.NewCleanupService(cleanupRepo, anchoring),
+		Evidences:      services.NewEvidenceService(evidenceRepo, anchoring),
+		BitcoinRecords: bitcoinRepo,
+		Wallet:         bitcoin.NewWallet(rpcClient),
+	}
+
+	server := routes.New(handlerSet, cfg.JWTSecret)
+
+	mux := server.Mux()
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
+
+	addr := ":" + cfg.Port
+	log.Printf("Victoria Maler server starting on %s — open http://localhost:%s/", addr, cfg.Port)
+	if err := http.ListenAndServe(addr, server.Handler()); err != nil {
+		log.Fatalf("server error: %v", err)
+	}
 }
-
