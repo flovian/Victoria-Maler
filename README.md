@@ -1,6 +1,33 @@
-# Victoria Maler
+# EcoChain Victoria
 
 ## Bitcoin-Verified Crowdfunding Platform for Community-Led Lake Victoria Cleanup
+
+---
+
+# Quick Start
+
+```bash
+# 1. Run database migrations
+./scripts/migrate.sh
+
+# 2. (Optional) Seed demo data
+./scripts/seed.sh
+#   admin: admin@victoriamaler.org / admin12345
+#   ngo:   ngo@victoriamaler.org / ngo12345
+
+# 3. Start the server
+./scripts/run.sh
+# open http://localhost:8080/
+```
+
+Configuration lives in `.env` (`DB_PATH`, `PORT`, `JWT_SECRET`, and the
+`BITCOIN_*` keys). Bitcoin anchoring degrades gracefully: with no bitcoind
+node reachable, records are stored with a clearly labelled `sim-` txid and
+`simulated` status so the whole platform remains usable and verifiable.
+
+```bash
+go test ./...
+```
 
 ---
 
@@ -334,3 +361,4 @@ EcoChain Victoria aims to:
 EcoChain Victoria combines community action, environmental stewardship, crowdfunding, and blockchain verification to address one of the most critical challenges affecting Lake Victoria: the lack of trust and transparency in environmental cleanup initiatives.
 
 By leveraging Bitcoin Core as an immutable verification layer, the platform ensures that every cleanup activity, funding record, and environmental impact report can be independently verified, creating a trustworthy ecosystem that empowers communities to protect and restore one of Africa's most important natural resources.
+
