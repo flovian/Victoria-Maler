@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"ecochain-victoria/internal/middleware"
 	"ecochain-victoria/internal/repositories"
 	"ecochain-victoria/internal/services"
+	"ecochain-victoria/internal/utils"
 )
 
 // HandlerSet bundles every dependency handlers need.
@@ -71,4 +73,12 @@ func (r *Renderer) Page(w http.ResponseWriter, req *http.Request, page string, d
 func pageNameFromPath(path string) string {
 	base := filepath.Base(path)
 	return base[:len(base)-len(filepath.Ext(base))]
+}
+
+func (h *HandlerSet) claims(r *http.Request) (*utils.Claims, bool) {
+	return middleware.Claims(r)
+}
+
+func decodeJSON(r *http.Request, v interface{}) error {
+	return json.NewDecoder(r.Body).Decode(v)
 }
