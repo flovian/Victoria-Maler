@@ -1,1 +1,27 @@
-/* dashboard styles placeholder */
+/* dashboard.css: user dashboard layout */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 24px 0;
+}
+
+.dashboard-stats .card {
+  border-left: 4px solid var(--blue-600);
+}
+
+.dashboard-stats .stat-number {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--blue-900);
+}
+
+.dashboard-section {
+  margin-top: 26px;
+}
+
+.dashboard-section h3 {
+  color: var(--blue-900);
+  border-bottom: 2px solid #eff6ff;
+  padding-bottom: 8px;
+}
